@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@assemblyscript/loader/umd/index.js"></script>
     <script src="./js/loader.js"></script>
 </head>
 <body>
@@ -12,11 +13,17 @@
         const Wl = new WasmLoader();
         Wl.wasm('./build/optimized.wasm').then(
             instance  => {
-                const {minusOne} = instance ;
-                document.write(minusOne(44))
+                const {readMemory, memory} = instance;
+
+                const memoryArray = new Uint8Array(memory.buffer);
+
+                document.write(memoryArray[1]);
+                document.write("<br>");
+                memoryArray[2] = 45;
+
+                document.write(readMemory(2))
             }
         )
-        
     </script>
 </body>
 </html>
